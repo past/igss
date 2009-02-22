@@ -65,9 +65,9 @@ function load()
     loading.stopAnimation();
 }
 
-var username = 'ebstest@grnet-hq.gss.grnet.gr';
-var token = 'VH5goDiAoRgfs2gStFSbYYde3by9cfstSDXTL5tpOyQfs8dp3fPZEw';
-var GSS_URL = 'http://gss.grnet.gr/gss/rest/';
+var username = 'ebstest@grnet-hq.admin.grnet.gr';
+var token = 'VH5goDiAoRgfs2gStFSbYYde3by9cfstSDXTL5tpOyQfs8dp3fPZEw==';
+var GSS_URL = 'http://gss.grnet.gr/gss/rest';
 
 // Sample data.  Some applications may have static data like this, but most will want to use information fetched remotely via XMLHttpRequest.
 var parks = [
@@ -92,7 +92,8 @@ function sendRequest(method, resource, modified, file, form, update) {
     loading.startAnimation();
 	// Use strict RFC compliance
 	b64pad = "=";
-
+    
+    resource = decodeURI(resource);
 	var params = null;
 	var now = (new Date()).toUTCString();
 	var q = resource.indexOf('?');
@@ -105,16 +106,14 @@ function sendRequest(method, resource, modified, file, form, update) {
 		params = update;
 
 	var req = new XMLHttpRequest();
-	req.open(method, GSS_URL+resource, true);
+	req.open(method, GSS_URL + resource, true);
 	req.onreadystatechange = function (event) {
 		if (req.readyState == 4) {
             loading.stopAnimation();
 			if(req.status == 200) {
-				var result = document.getElementById("result");
-				result.innerHTML = "<pre>"+req.getAllResponseHeaders()+"\n"+req.responseText+"</pre>";
+				alert(req.getAllResponseHeaders()+"\n"+req.responseText);
 		    } else {
-		    	var result = document.getElementById("result");
-				result.innerHTML = "<span style='color: red'>"+req.status+": "+req.statusText+"</span>"+"<pre>"+req.getAllResponseHeaders()+"</pre>";
+		    	alert(req.status+": "+req.statusText+"\n"+req.getAllResponseHeaders());
 		    }
 		}
 	}
@@ -143,6 +142,6 @@ function sendRequest(method, resource, modified, file, form, update) {
 function fetchUser(event)
 {
     var browser = document.getElementById('browser').object;
-    sendRequest('GET', username, null, null, null, null);
+    sendRequest('GET', '/'+username+'/');
     //browser.goForward(document.getElementById('listLevel'), 'List');
 }
