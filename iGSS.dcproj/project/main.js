@@ -143,6 +143,6 @@ function sendRequest(method, resource, modified, file, form, update) {
 function fetchUser(event)
 {
     var browser = document.getElementById('browser').object;
-    sendRequest('GET', username);
+    sendRequest('GET', username, null, null, null, null);
     //browser.goForward(document.getElementById('listLevel'), 'List');
 }

@@ -3,10 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Breakpoints</key>
-	<dict>
-		<key>main.js:92</key>
-		<string>sendRequest</string>
-	</dict>
+	<dict/>
 	<key>ContentSplitViewGeometry</key>
 	<dict>
 		<key>ContentSplitViewConfig</key>
@@ -51,7 +48,7 @@
 	<key>NavigatorSplitViewGeometry</key>
 	<dict>
 		<key>ContentSplitViewConfig</key>
-		<integer>9</integer>
+		<integer>5</integer>
 		<key>SplitViewConfig</key>
 		<integer>3</integer>
 		<key>_collapsingFrameDimension</key>
