@@ -126,14 +126,22 @@
 		</array>
 	</array>
 	<key>Objects view last selections</key>
-	<array/>
+	<array>
+		<array>
+			<integer>0</integer>
+			<integer>0</integer>
+			<integer>1</integer>
+			<integer>1</integer>
+			<integer>0</integer>
+		</array>
+	</array>
 	<key>Opened Steps</key>
 	<array>
 		<integer>0</integer>
 	</array>
 	<key>Visible StackLayout Views</key>
 	<array>
-		<string>login</string>
+		<string>listLevel</string>
 	</array>
 </dict>
 </plist>

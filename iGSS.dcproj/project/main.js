@@ -10,23 +10,23 @@ var listController = {
     
     numberOfRows: function() {
         // The List calls this dataSource method to find out how many rows should be in the list.
-        return parks.length;
+        return items.length;
     },
     
     prepareRow: function(rowElement, rowIndex, templateElements) {
         // The List calls this dataSource method for every row.  templateElements contains references to all elements inside the template that have an id. We use it to fill in the text of the rowTitle element.
         if (templateElements.rowTitle) {
-            templateElements.rowTitle.innerText = parks[rowIndex].name;
+            templateElements.rowTitle.innerText = items[rowIndex].name;
         }
 
         // We also assign an onclick handler that will cause the browser to go to the detail page.
         var self = this;
         var handler = function() {
-            var park = parks[rowIndex];
-            detailController.setPark(park);
+            var item = items[rowIndex];
+            detailController.setPark(item);
             var browser = document.getElementById('browser').object;
             // The Browser's goForward method is used to make the browser push down to a new level.  Going back to previous levels is handled automatically.
-            browser.goForward(document.getElementById('detailLevel'), park.name);
+            browser.goForward(document.getElementById('detailLevel'), item.name);
         };
         rowElement.onclick = handler;
     }
@@ -69,23 +69,8 @@ var username = 'ebstest@grnet-hq.admin.grnet.gr';
 var token = 'VH5goDiAoRgfs2gStFSbYYde3by9cfstSDXTL5tpOyQfs8dp3fPZEw==';
 var GSS_URL = 'http://gss.grnet.gr/gss/rest';
 
-// Sample data.  Some applications may have static data like this, but most will want to use information fetched remotely via XMLHttpRequest.
-var parks = [
-    { name: "Acadia", location: "Maine, USA" }, 
-    { name: "Bryce Canyon", location: "Utah, USA" }, 
-    { name: "Carlsbad Caverns ", location: "New Mexico, USA" }, 
-    { name: "Cuyahoga Valley", location: "Ohio, USA" }, 
-    { name: "Death Valley", location: "California, USA" }, 
-    { name: "Denali Preserve", location: "Alaska, USA" }, 
-    { name: "Grand Canyon", location: "Arizona, USA" }, 
-    { name: "Haleakala", location: "Hawaii, USA" }, 
-    { name: "Joshua Tree", location: "California, USA" }, 
-    { name: "Kings Canyon", location: "California, USA" }, 
-    { name: "Mesa Verde", location: "Colorado, USA" },
-    { name: "Shenandoah", location: "Virginia, USA" },
-    { name: "Yellowstone", location: "Wyoming, USA" },
-    { name: "Yosemite", location: "California, USA" }
-];
+// The container for the list items.
+var items = [];
 
 function sendRequest(handler, method, resource, modified, file, form, update) {
     var loading = document.getElementById('activityIndicator').object;
@@ -110,8 +95,7 @@ function sendRequest(handler, method, resource, modified, file, form, update) {
 	req.onreadystatechange = function (event) {
 		if (req.readyState == 4) {
             loading.stopAnimation();
-            alert(req.getAllResponseHeaders());
-			if(req.status == 200) {
+            if(req.status == 200) {
                 handler(req.responseText);
 		    } else {
 		    	alert("Error fetching data: HTTP status " + req.status+" ("+req.statusText+")");
@@ -148,8 +132,12 @@ function fetchUser(event)
 
 // Parses the 'user' namespace response.
 function parseUser(json) {
-	alert(JSON.parse(json));
-    JSON.parse(json);
+    var userobj = JSON.parse(json);
+    items.push({name: 'Files', location: userobj['files']});
+    items.push({name: 'Trash', location: userobj['trash']});
+    items.push({name: 'Shared', location: userobj['shared']});
+    items.push({name: 'Others', location: userobj['others']});
+    items.push({name: 'Groups', location: userobj['groups']});
     var browser = document.getElementById('browser').object;
-    browser.goForward(document.getElementById('listLevel'), 'List');
+    browser.goForward(document.getElementById('listLevel'), userobj["name"]);
 }

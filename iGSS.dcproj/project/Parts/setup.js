@@ -13,7 +13,7 @@ var dashcodePartSpecs = {
     "detailLocation": { "creationFunction": "CreateText", "text": "Location" },
     "detailTitle": { "creationFunction": "CreateText", "text": "Title" },
     "header": { "creationFunction": "CreateHeader", "rootTitle": "Browser" },
-    "list": { "creationFunction": "CreateList", "dataSourceName": "listController", "labelElementId": "rowTitle", "listStyle": "List.EDGE_TO_EDGE", "sampleRows": 8, "useDataSource": true },
+    "list": { "creationFunction": "CreateList", "dataSourceName": "listController", "labelElementId": "rowTitle", "listStyle": "List.EDGE_TO_EDGE", "sampleRows": 5, "useDataSource": true },
     "rowTitle": { "creationFunction": "CreateText", "text": "Item" },
     "stackLayout": { "creationFunction": "CreateStackLayout", "subviewsTransitions": [{ "direction": "right-left", "duration": "", "timing": "ease-in-out", "type": "push" }, { "direction": "right-left", "duration": "", "timing": "ease-in-out", "type": "push" }, { "direction": "right-left", "duration": "", "timing": "ease-in-out", "type": "push" }] },
     "tokenLabel": { "creationFunction": "CreateText", "text": "Token" },
