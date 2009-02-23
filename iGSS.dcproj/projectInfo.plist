@@ -2,8 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>AppIconFGImagePoint</key>
+	<string>{0, 0}</string>
+	<key>AppIconFGImageSize</key>
+	<string>{57, 57}</string>
 	<key>AppIconImageSettings</key>
 	<string>image-theme: 1; image-shape: 3; image-opacity: 1.00; image-top-color: 0.828152895,0.874723434,0.978072762; image-bottom-color: 0.45343709,0.541603744,0.676615536; image-radius: 12,12,12,12; image-border: 0; image-border-color: 0.529399991,0.529399991,0.529399991; image-border-width: 1;</string>
+	<key>AppIconIncludeFGImage</key>
+	<true/>
 	<key>CYProjectFormatVersion</key>
 	<integer>14</integer>
 	<key>CYShineVersion</key>
