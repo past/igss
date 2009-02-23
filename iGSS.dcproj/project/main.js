@@ -133,11 +133,14 @@ function fetchUser(event)
 // Parses the 'user' namespace response.
 function parseUser(json) {
     var userobj = JSON.parse(json);
+    items = [];
     items.push({name: 'Files', location: userobj['files']});
     items.push({name: 'Trash', location: userobj['trash']});
     items.push({name: 'Shared', location: userobj['shared']});
     items.push({name: 'Others', location: userobj['others']});
     items.push({name: 'Groups', location: userobj['groups']});
+    var list = document.getElementById('list').object;
+    list.reloadData();
     var browser = document.getElementById('browser').object;
     browser.goForward(document.getElementById('listLevel'), userobj["name"]);
 }
