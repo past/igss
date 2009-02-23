@@ -87,7 +87,7 @@ var parks = [
     { name: "Yosemite", location: "California, USA" }
 ];
 
-function sendRequest(method, resource, modified, file, form, update) {
+function sendRequest(handler, method, resource, modified, file, form, update) {
     var loading = document.getElementById('activityIndicator').object;
     loading.startAnimation();
 	// Use strict RFC compliance
@@ -110,10 +110,11 @@ function sendRequest(method, resource, modified, file, form, update) {
 	req.onreadystatechange = function (event) {
 		if (req.readyState == 4) {
             loading.stopAnimation();
+            alert(req.getAllResponseHeaders());
 			if(req.status == 200) {
-				alert(req.getAllResponseHeaders()+"\n"+req.responseText);
+                handler(req.responseText);
 		    } else {
-		    	alert(req.status+": "+req.statusText+"\n"+req.getAllResponseHeaders());
+		    	alert("Error fetching data: HTTP status " + req.status+" ("+req.statusText+")");
 		    }
 		}
 	}
@@ -139,9 +140,16 @@ function sendRequest(method, resource, modified, file, form, update) {
 		req.send(file);
 }
 
+// Fetches the 'user' namespace.
 function fetchUser(event)
 {
+    sendRequest(parseUser, 'GET', '/'+username+'/');
+}
+
+// Parses the 'user' namespace response.
+function parseUser(json) {
+	alert(JSON.parse(json));
+    JSON.parse(json);
     var browser = document.getElementById('browser').object;
-    sendRequest('GET', '/'+username+'/');
-    //browser.goForward(document.getElementById('listLevel'), 'List');
+    browser.goForward(document.getElementById('listLevel'), 'List');
 }
