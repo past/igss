@@ -19,14 +19,24 @@ var listController = {
             templateElements.rowTitle.innerText = items[rowIndex].name;
         }
 
-        // We also assign an onclick handler that will cause the browser to go to the detail page.
+        // We also assign an onclick handler that will cause the browser to go to the next page.
         var self = this;
         var handler = function() {
             var item = items[rowIndex];
             detailController.setPark(item);
             var browser = document.getElementById('browser').object;
-            // The Browser's goForward method is used to make the browser push down to a new level.  Going back to previous levels is handled automatically.
-            browser.goForward(document.getElementById('detailLevel'), item.name);
+            if (item.name == 'Files')
+                fetchFiles();
+            else if (item.name == 'Trash')
+                fetchTrash();
+            else if (item.name == 'Shared')
+                fetchShared();
+            else if (item.name == 'Others')
+                fetchOthers();
+            else if (item.name == 'Groups')
+                fetchGroups();
+            else
+                browser.goForward(document.getElementById('detailLevel'), item.name);
         };
         rowElement.onclick = handler;
     }
@@ -143,4 +153,47 @@ function parseUser(json) {
     list.reloadData();
     var browser = document.getElementById('browser').object;
     browser.goForward(document.getElementById('listLevel'), userobj["name"]);
+}
+
+// Fetches the 'files' namespace.
+function fetchFiles(event)
+{
+    sendRequest(parseFiles, 'GET', '/'+username+'/files');
+}
+
+// Parses the 'files' namespace response.
+function parseFiles(json) {
+    var filesobj = JSON.parse(json);
+    items = [];
+    var folders = filesobj['subfolders'];
+    while (folders.length > 0) {
+        var folder = folders.pop();
+        items.push({name: folder, location: folder});
+    }
+    var list = document.getElementById('list').object;
+    list.reloadData();
+    var browser = document.getElementById('browser').object;
+    browser.goForward(document.getElementById('listLevel'), 'Files');
+}
+
+// Fetches the 'trash' namespace.
+function fetchTrash(event)
+{
+    sendRequest(parseFiles, 'GET', '/'+username+'/trash');
+}
+
+// Parses the 'trash' namespace response.
+function parseTrash(json) {
+    var filesobj = JSON.parse(json);
+    alert(json);
+    items = [];
+    var folders = filesobj['subfolders'];
+    while (folders.length > 0) {
+        var folder = folders.pop();
+        items.push({name: folder, location: folder});
+    }
+    var list = document.getElementById('list').object;
+    list.reloadData();
+    var browser = document.getElementById('browser').object;
+    browser.goForward(document.getElementById('listLevel'), 'Trash');
 }
