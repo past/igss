@@ -339,3 +339,154 @@ body {
     left: 282px;
     top: 7px;
 }
+
+#home {
+    width: 100%;
+    min-height: 384px;
+    display: none;
+    position: relative;
+}
+
+#box {
+    border-color: rgb(172, 172, 172);
+    border-style: solid;
+    border-width: 1px;
+    background-color: white;
+    -webkit-border-top-right-radius: 8px 8px;
+    -webkit-border-top-left-radius: 8px 8px;
+    -webkit-border-bottom-left-radius: 8px 8px;
+    -webkit-border-bottom-right-radius: 8px 8px;
+    position: relative;
+    margin-top: 17px;
+    margin-left: 9px;
+    -webkit-margin-top-collapse: separate;
+    -webkit-margin-bottom-collapse: separate;
+    margin-right: 9px;
+    width: auto;
+    min-height: 80px;
+    height: auto;
+}
+
+#columnLayout {
+    display: table;
+    overflow: hidden;
+    position: relative;
+    margin-left: 0px;
+    min-height: 40px;
+    height: auto;
+    width: 100%;
+    -webkit-margin-top-collapse: separate;
+    -webkit-margin-bottom-collapse: separate;
+}
+
+#column {
+    position: relative;
+    height: auto;
+    min-height: 40px;
+}
+
+#column1 {
+    position: relative;
+    height: auto;
+    min-height: 40px;
+}
+
+#button1 {
+    font-family: Helvetica;
+    font-weight: bold;
+    font-size: 12px;
+    color: rgb(255, 255, 255);
+    text-align: center;
+    text-shadow: rgba(0, 0, 0, 0.6) 0px -1px 0px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 80px;
+    height: 30px;
+    -webkit-dashboard-region: dashboard-region(control rectangle);
+    position: relative;
+    -webkit-margin-top-collapse: separate;
+    -webkit-margin-bottom-collapse: separate;
+    margin-left: 35px;
+    margin-top: 5px;
+}
+
+#button2 {
+    font-family: Helvetica;
+    font-weight: bold;
+    font-size: 12px;
+    color: rgb(255, 255, 255);
+    text-align: center;
+    text-shadow: rgba(0, 0, 0, 0.6) 0px -1px 0px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 80px;
+    height: 30px;
+    -webkit-dashboard-region: dashboard-region(control rectangle);
+    position: relative;
+    -webkit-margin-top-collapse: separate;
+    -webkit-margin-bottom-collapse: separate;
+    margin-left: 35px;
+    margin-top: 5px;
+}
+
+#columnLayout1 {
+    display: table;
+    overflow: hidden;
+    position: relative;
+    margin-left: 0px;
+    min-height: 40px;
+    height: auto;
+    width: 100%;
+    -webkit-margin-top-collapse: separate;
+    -webkit-margin-bottom-collapse: separate;
+}
+
+#column2 {
+    position: relative;
+    height: auto;
+    min-height: 40px;
+}
+
+#column3 {
+    position: relative;
+    height: auto;
+    min-height: 40px;
+}
+
+#button3 {
+    font-family: Helvetica;
+    font-weight: bold;
+    font-size: 12px;
+    color: rgb(255, 255, 255);
+    text-align: center;
+    text-shadow: rgba(0, 0, 0, 0.6) 0px -1px 0px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 80px;
+    height: 30px;
+    -webkit-dashboard-region: dashboard-region(control rectangle);
+    position: relative;
+    -webkit-margin-top-collapse: separate;
+    -webkit-margin-bottom-collapse: separate;
+    margin-left: 35px;
+    margin-top: 5px;
+}
+
+#button4 {
+    font-family: Helvetica;
+    font-weight: bold;
+    font-size: 12px;
+    color: rgb(255, 255, 255);
+    text-align: center;
+    text-shadow: rgba(0, 0, 0, 0.6) 0px -1px 0px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 80px;
+    height: 30px;
+    -webkit-dashboard-region: dashboard-region(control rectangle);
+    position: relative;
+    -webkit-margin-top-collapse: separate;
+    -webkit-margin-bottom-collapse: separate;
+    margin-left: 35px;
+    margin-top: 5px;
+}

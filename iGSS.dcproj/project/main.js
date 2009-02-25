@@ -76,7 +76,7 @@ function load()
 }
 
 var username = 'ebstest@grnet-hq.admin.grnet.gr';
-var token = 'VH5goDiAoRgfs2gStFSbYYde3by9cfstSDXTL5tpOyQfs8dp3fPZEw==';
+var token = 'QSnfekTQsQbyvIE9jHEreoL59G77hzTIRBVI36ZqkHn/VCG4ReMI6w==';
 var GSS_URL = 'http://gss.grnet.gr/gss/rest';
 
 // The container for the list items.
@@ -152,7 +152,7 @@ function parseUser(json) {
     var list = document.getElementById('list').object;
     list.reloadData();
     var browser = document.getElementById('browser').object;
-    browser.goForward(document.getElementById('listLevel'), userobj["name"]);
+    browser.goForward(document.getElementById('home'), userobj["name"]);
 }
 
 // Fetches the 'files' namespace.
