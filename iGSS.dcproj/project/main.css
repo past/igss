@@ -490,3 +490,21 @@ body {
     margin-left: 35px;
     margin-top: 5px;
 }
+
+#name {
+    color: black;
+    font-size: 17px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    position: relative;
+    margin-left: 0px;
+    -webkit-margin-top-collapse: separate;
+    -webkit-margin-bottom-collapse: separate;
+    text-align: center;
+    font-family: 'Arial Rounded MT Bold';
+    margin-right: 0px;
+    width: auto;
+    height: auto;
+    min-height: 20px;
+    padding: 4px;
+}

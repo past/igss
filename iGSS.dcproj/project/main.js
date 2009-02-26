@@ -60,10 +60,7 @@ var detailController = {
     
 };
 
-//
-// Function: load()
-// Called by HTML body element's onload event when the web application is ready to start
-//
+// Called by HTML body element's onload event when the web application is ready to start.
 function load()
 {
     dashcode.setupParts();
@@ -76,7 +73,7 @@ function load()
 }
 
 var username = 'ebstest@grnet-hq.admin.grnet.gr';
-var token = 'QSnfekTQsQbyvIE9jHEreoL59G77hzTIRBVI36ZqkHn/VCG4ReMI6w==';
+var token = 'TbQupIk3xIuhNVF61DQiS2UidbCbcqAGcwNPK10tIMHkuh+XO72ovg==';
 var GSS_URL = 'http://gss.grnet.gr/gss/rest';
 
 // The container for the list items.
@@ -151,8 +148,10 @@ function parseUser(json) {
     items.push({name: 'Groups', location: userobj['groups']});
     var list = document.getElementById('list').object;
     list.reloadData();
+    var name = document.getElementById('name');
+    name.innerHTML = userobj['name'];
     var browser = document.getElementById('browser').object;
-    browser.goForward(document.getElementById('home'), userobj["name"]);
+    browser.goForward(document.getElementById('home'), 'Home');
 }
 
 // Fetches the 'files' namespace.
@@ -165,10 +164,15 @@ function fetchFiles(event)
 function parseFiles(json) {
     var filesobj = JSON.parse(json);
     items = [];
-    var folders = filesobj['subfolders'];
+    var folders = filesobj['folders'];
     while (folders.length > 0) {
         var folder = folders.pop();
-        items.push({name: folder, location: folder});
+        items.push({name: folder['name'], location: folder['uri']});
+    }
+    var files = filesobj['files'];
+    while (files.length > 0) {
+        var file = files.pop();
+        items.push({name: file['name'], location: file['uri']});
     }
     var list = document.getElementById('list').object;
     list.reloadData();
@@ -185,15 +189,61 @@ function fetchTrash(event)
 // Parses the 'trash' namespace response.
 function parseTrash(json) {
     var filesobj = JSON.parse(json);
-    alert(json);
     items = [];
-    var folders = filesobj['subfolders'];
+    var folders = filesobj['folders'];
     while (folders.length > 0) {
         var folder = folders.pop();
-        items.push({name: folder, location: folder});
+        items.push({name: folder['name'], location: folder['uri']});
+    }
+    var files = filesobj['files'];
+    while (files.length > 0) {
+        var file = files.pop();
+        items.push({name: file['name'], location: file['uri']});
     }
     var list = document.getElementById('list').object;
     list.reloadData();
     var browser = document.getElementById('browser').object;
     browser.goForward(document.getElementById('listLevel'), 'Trash');
+}
+
+// Fetches the 'others' namespace.
+function fetchOthers(event)
+{
+    sendRequest(parseOthers, 'GET', '/'+username+'/others');
+}
+
+// Parses the 'others' namespace response.
+function parseOthers(json) {
+    var users = JSON.parse(json);
+    items = [];
+    while (users.length > 0) {
+        var user = users.pop();
+        var username = user.substring(user.lastIndexOf('/')+1);
+        items.push({name: username, location: user});
+    }
+    var list = document.getElementById('list').object;
+    list.reloadData();
+    var browser = document.getElementById('browser').object;
+    browser.goForward(document.getElementById('listLevel'), 'Others');
+}
+
+// Parses the 'groups' namespace response.
+function fetchGroups(event)
+{
+    sendRequest(parseGroups, 'GET', '/'+username+'/groups');
+}
+
+// Parses the 'groups' namespace response.
+function parseGroups(json) {
+    var groups = JSON.parse(json);
+    items = [];
+    while (groups.length > 0) {
+        var group = groups.pop();
+        var groupname = group.substring(group.lastIndexOf('/')+1);
+        items.push({name: groupname, location: group});
+    }
+    var list = document.getElementById('list').object;
+    list.reloadData();
+    var browser = document.getElementById('browser').object;
+    browser.goForward(document.getElementById('listLevel'), 'Groups');
 }
