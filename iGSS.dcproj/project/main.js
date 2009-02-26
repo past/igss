@@ -167,7 +167,7 @@ function parseFiles(json) {
     var folders = filesobj['folders'];
     while (folders.length > 0) {
         var folder = folders.pop();
-        items.push({name: folder['name'], location: folder['uri']});
+        items.push({name: folder['name']+'/', location: folder['uri']});
     }
     var files = filesobj['files'];
     while (files.length > 0) {
