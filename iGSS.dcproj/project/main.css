@@ -203,24 +203,6 @@ body {
     height: auto;
 }
 
-#detailLocation {
-    font-family: Helvetica;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    position: relative;
-    margin-left: 0px;
-    -webkit-margin-top-collapse: separate;
-    -webkit-margin-bottom-collapse: separate;
-    color: rgb(128, 128, 128);
-    font-size: 14px;
-    margin-right: 0px;
-    margin-top: 2px;
-    width: auto;
-    height: auto;
-    min-height: 17px;
-    white-space: nowrap;
-}
-
 #detailDescription {
     color: black;
     font-family: Helvetica;
@@ -507,4 +489,22 @@ body {
     height: auto;
     min-height: 20px;
     padding: 4px;
+}
+
+#detailOwner {
+    font-family: Helvetica;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    position: relative;
+    margin-left: 0px;
+    -webkit-margin-top-collapse: separate;
+    -webkit-margin-bottom-collapse: separate;
+    color: rgb(128, 128, 128);
+    font-size: 14px;
+    margin-right: 0px;
+    margin-top: 2px;
+    width: auto;
+    height: auto;
+    min-height: 17px;
+    white-space: nowrap;
 }

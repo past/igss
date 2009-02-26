@@ -14,7 +14,7 @@ var dashcodePartSpecs = {
     "button3": { "creationFunction": "CreatePushButton", "initialHeight": 30, "initialWidth": 80, "leftImageWidth": 5, "onclick": "fetchOthers", "rightImageWidth": 5, "text": "Others" },
     "button4": { "creationFunction": "CreatePushButton", "initialHeight": 30, "initialWidth": 80, "leftImageWidth": 5, "onclick": "fetchGroups", "rightImageWidth": 5, "text": "Groups" },
     "detailDescription": { "creationFunction": "CreateText", "text": "Description" },
-    "detailLocation": { "creationFunction": "CreateText", "text": "Location" },
+    "detailOwner": { "creationFunction": "CreateText", "text": "Owner" },
     "detailTitle": { "creationFunction": "CreateText", "text": "Title" },
     "header": { "creationFunction": "CreateHeader", "rootTitle": "Browser" },
     "list": { "creationFunction": "CreateList", "dataSourceName": "listController", "labelElementId": "rowTitle", "listStyle": "List.EDGE_TO_EDGE", "sampleRows": 5, "useDataSource": true },

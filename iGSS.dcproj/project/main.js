@@ -52,8 +52,8 @@ var detailController = {
         // When the park is set, this controller also updates the DOM for the detail page appropriately.  As you customize the design for the detail page, you will want to extend this code to make sure that the correct information is populated into the detail UI.
         var detailTitle = document.getElementById('detailTitle');
         detailTitle.innerHTML = this._park.name;
-        var detailLocation = document.getElementById('detailLocation');
-        detailLocation.innerHTML = this._park.location;
+        var detailOwner = document.getElementById('detailOwner');
+        detailOwner.innerHTML = this._park.owner;
         var detailDescription = document.getElementById('detailDescription');
         detailDescription.innerHTML = "The scenery in " + this._park.name + " is amazing this time of year!";
     }
@@ -167,12 +167,12 @@ function parseFiles(json) {
     var folders = filesobj['folders'];
     while (folders.length > 0) {
         var folder = folders.pop();
-        items.push({name: folder['name']+'/', location: folder['uri']});
+        items.push({name: folder['name']+'/', location: folder['uri'], owner: folder['owner']});
     }
     var files = filesobj['files'];
     while (files.length > 0) {
         var file = files.pop();
-        items.push({name: file['name'], location: file['uri']});
+        items.push({name: file['name'], location: file['uri'], owner: file['owner']});
     }
     var list = document.getElementById('list').object;
     list.reloadData();
@@ -193,12 +193,12 @@ function parseTrash(json) {
     var folders = filesobj['folders'];
     while (folders.length > 0) {
         var folder = folders.pop();
-        items.push({name: folder['name'], location: folder['uri']});
+        items.push({name: folder['name'], location: folder['uri'], owner: folder['owner']});
     }
     var files = filesobj['files'];
     while (files.length > 0) {
         var file = files.pop();
-        items.push({name: file['name'], location: file['uri']});
+        items.push({name: file['name'], location: file['uri'], owner: file['owner']});
     }
     var list = document.getElementById('list').object;
     list.reloadData();
@@ -219,7 +219,7 @@ function parseOthers(json) {
     while (users.length > 0) {
         var user = users.pop();
         var username = user.substring(user.lastIndexOf('/')+1);
-        items.push({name: username, location: user});
+        items.push({name: username, location: user, owner: username});
     }
     var list = document.getElementById('list').object;
     list.reloadData();
@@ -240,7 +240,10 @@ function parseGroups(json) {
     while (groups.length > 0) {
         var group = groups.pop();
         var groupname = group.substring(group.lastIndexOf('/')+1);
-        items.push({name: groupname, location: group});
+        var parentUrl = group.substring(0, group.lastIndexOf('/'));
+        var ownerUrl = parentUrl.substring(0, parentUrl.lastIndexOf('/'));
+        var owner = ownerUrl.substring(ownerUrl.lastIndexOf('/')+1);
+        items.push({name: groupname, location: group, owner: owner});
     }
     var list = document.getElementById('list').object;
     list.reloadData();
