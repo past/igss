@@ -73,7 +73,7 @@ function load()
 }
 
 var username = 'ebstest@grnet-hq.admin.grnet.gr';
-var token = 'TbQupIk3xIuhNVF61DQiS2UidbCbcqAGcwNPK10tIMHkuh+XO72ovg==';
+var token = 'jxFB+tJLLfVvIuLuv0+KNOXW0GSqY5M7V0pfLH302Ki12Lc1S30zpA==';
 var GSS_URL = 'http://gss.grnet.gr/gss/rest';
 
 // The container for the list items.
@@ -218,8 +218,7 @@ function parseOthers(json) {
     items = [];
     while (users.length > 0) {
         var user = users.pop();
-        var username = user.substring(user.lastIndexOf('/')+1);
-        items.push({name: username, location: user, owner: username});
+        items.push({name: user['username'], location: user['uri'], owner: user['username']});
     }
     var list = document.getElementById('list').object;
     list.reloadData();
@@ -239,11 +238,10 @@ function parseGroups(json) {
     items = [];
     while (groups.length > 0) {
         var group = groups.pop();
-        var groupname = group.substring(group.lastIndexOf('/')+1);
-        var parentUrl = group.substring(0, group.lastIndexOf('/'));
+        var parentUrl = group['uri'].substring(0, group['uri'].lastIndexOf('/'));
         var ownerUrl = parentUrl.substring(0, parentUrl.lastIndexOf('/'));
         var owner = ownerUrl.substring(ownerUrl.lastIndexOf('/')+1);
-        items.push({name: groupname, location: group, owner: owner});
+        items.push({name: group['name'], location: group['uri'], owner: owner});
     }
     var list = document.getElementById('list').object;
     list.reloadData();
