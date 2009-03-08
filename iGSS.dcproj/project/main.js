@@ -63,6 +63,26 @@ var detailController = {
 // Called by HTML body element's onload event when the web application is ready to start.
 function load()
 {
+    if (!username || ! token) {
+        var allcookies = document.cookie;
+        var pos = allcookies.indexOf("_gss_a=");
+        if (pos != -1) {
+            var start = pos + 7;
+            var end = allcookies.indexOf(";", start);
+            if (end == -1)
+                end = allcookies.length;
+            var gsscookie = allcookies.substring(start, end);
+            gsscookie = decodeURIComponent(gsscookie);
+            alert(cookie);
+            var values = gsscookie.split('|');
+            username = values[0];
+            token = values[1];
+            // Delete the cookie value.
+            document.cookie = "_gss_a=;max-age=-1;domain=srv-01.gss.grnet.gr;path=/m/";
+        } else {
+            location = "https://gss.grnet.gr/gss/login?next=http://srv-01.gss.grnet.gr:8080/m/";
+        }
+    }
     dashcode.setupParts();
     var userField = document.getElementById('username');
     userField.value = username;
@@ -72,8 +92,8 @@ function load()
     loading.stopAnimation();
 }
 
-var username = 'ebstest@grnet-hq.admin.grnet.gr';
-var token = 'jxFB+tJLLfVvIuLuv0+KNOXW0GSqY5M7V0pfLH302Ki12Lc1S30zpA==';
+var username;
+var token;
 var GSS_URL = 'http://gss.grnet.gr/gss/rest';
 
 // The container for the list items.
