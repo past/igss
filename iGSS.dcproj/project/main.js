@@ -78,9 +78,9 @@ function load()
             username = values[0];
             token = values[1];
             // Delete the cookie value.
-            document.cookie = "_gss_a=;max-age=-1;domain=srv-01.gss.grnet.gr;path=/m/";
+            document.cookie = "_gss_a=;max-age=-1;domain=gss.grnet.gr;path=/m/";
         } else {
-            location = "https://gss.grnet.gr/gss/login?next=http://srv-01.gss.grnet.gr:8080/m/";
+            location = "https://gss.grnet.gr/gss/login?next=http://gss.grnet.gr/m/";
         }
     }
     dashcode.setupParts();
