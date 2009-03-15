@@ -4,6 +4,17 @@
  according to the license.txt file included in the project.
  */
 
+// The current user's username.
+var username;
+// The current user's authentication token.
+var token;
+// The root URL of the REST API.
+var GSS_URL = 'http://gss.grnet.gr/gss/rest';
+// The user root namespace.
+var root;
+// The container for the list items.
+var items = [];
+
 var listController = {
     // This object acts as a controller for the list UI.
     // It implements the dataSource methods for the list.
@@ -23,7 +34,7 @@ var listController = {
         var self = this;
         var handler = function() {
             var item = items[rowIndex];
-            detailController.setPark(item);
+            detailController.populate(item);
             var browser = document.getElementById('browser').object;
             if (item.name == 'Files')
                 fetchFiles();
@@ -35,7 +46,11 @@ var listController = {
                 fetchOthers();
             else if (item.name == 'Groups')
                 fetchGroups();
+            else if (item.data)
+                // File
+                fetchFile(item.location);
             else
+                // Folder
                 browser.goForward(document.getElementById('detailLevel'), item.name);
         };
         rowElement.onclick = handler;
@@ -45,24 +60,22 @@ var listController = {
 var detailController = {
     // This object acts as a controller for the detail UI.
     
-    setPark: function(park) {
-        this._park = park;
-        this._representedObject = park.name;
+    populate: function(item) {
+        this._item = item;
         
         // When the park is set, this controller also updates the DOM for the detail page appropriately.  As you customize the design for the detail page, you will want to extend this code to make sure that the correct information is populated into the detail UI.
         var detailTitle = document.getElementById('detailTitle');
-        detailTitle.innerHTML = this._park.name;
+        detailTitle.innerHTML = this._item.name;
         var detailOwner = document.getElementById('detailOwner');
-        detailOwner.innerHTML = this._park.owner;
+        detailOwner.innerHTML = this._item.owner;
         var detailDescription = document.getElementById('detailDescription');
-        detailDescription.innerHTML = "The scenery in " + this._park.name + " is amazing this time of year!";
+        detailDescription.innerHTML = "<a href='" + this._item.folder + this._item.name + "'>Download</a>";
     }
     
 };
 
 // Called by HTML body element's onload event when the web application is ready to start.
-function load()
-{
+function load() {
     if (!username || ! token) {
         var allcookies = document.cookie;
         var pos = allcookies.indexOf("_gss_a=");
@@ -92,19 +105,16 @@ function load()
     loading.stopAnimation();
 }
 
-var username;
-var token;
-var GSS_URL = 'http://gss.grnet.gr/gss/rest';
-
-// The container for the list items.
-var items = [];
-
+// A helper function for making API requests.
 function sendRequest(handler, method, resource, modified, file, form, update) {
     var loading = document.getElementById('activityIndicator').object;
     loading.startAnimation();
 	// Use strict RFC compliance
 	b64pad = "=";
     
+    // If the resource is an absolute URI, remove the GSS_URL.
+    if (resource.indexOf(GSS_URL) == 0)
+        resource = resource.slice(GSS_URL.length, resource.length);
     resource = decodeURI(resource);
 	var params = null;
 	var now = (new Date()).toUTCString();
@@ -123,7 +133,7 @@ function sendRequest(handler, method, resource, modified, file, form, update) {
 		if (req.readyState == 4) {
             loading.stopAnimation();
             if(req.status == 200) {
-                handler(req.responseText);
+                handler(req);
 		    } else {
 		    	alert("Error fetching data: HTTP status " + req.status+" ("+req.statusText+")");
 		    }
@@ -158,18 +168,18 @@ function fetchUser(event)
 }
 
 // Parses the 'user' namespace response.
-function parseUser(json) {
-    var userobj = JSON.parse(json);
+function parseUser(req) {
+    root = JSON.parse(req.responseText);
     items = [];
-    items.push({name: 'Files', location: userobj['files']});
-    items.push({name: 'Trash', location: userobj['trash']});
-    items.push({name: 'Shared', location: userobj['shared']});
-    items.push({name: 'Others', location: userobj['others']});
-    items.push({name: 'Groups', location: userobj['groups']});
+    items.push({name: 'Files', location: root['files']});
+    items.push({name: 'Trash', location: root['trash']});
+    items.push({name: 'Shared', location: root['shared']});
+    items.push({name: 'Others', location: root['others']});
+    items.push({name: 'Groups', location: root['groups']});
     var list = document.getElementById('list').object;
     list.reloadData();
     var name = document.getElementById('name');
-    name.innerHTML = userobj['name'];
+    name.innerHTML = root['name'];
     var browser = document.getElementById('browser').object;
     browser.goForward(document.getElementById('home'), 'Home');
 }
@@ -177,22 +187,22 @@ function parseUser(json) {
 // Fetches the 'files' namespace.
 function fetchFiles(event)
 {
-    sendRequest(parseFiles, 'GET', '/'+username+'/files');
+    sendRequest(parseFiles, 'GET', root['files']);
 }
 
 // Parses the 'files' namespace response.
-function parseFiles(json) {
-    var filesobj = JSON.parse(json);
+function parseFiles(req) {
+    var filesobj = JSON.parse(req.responseText);
     items = [];
     var folders = filesobj['folders'];
     while (folders.length > 0) {
         var folder = folders.pop();
-        items.push({name: folder['name']+'/', location: folder['uri'], owner: folder['owner']});
+        items.push({name: folder['name']+'/', location: folder['uri']});
     }
     var files = filesobj['files'];
     while (files.length > 0) {
         var file = files.pop();
-        items.push({name: file['name'], location: file['uri'], owner: file['owner']});
+        items.push({name: file['name'], location: file['uri'], owner: file['owner'], data: file});
     }
     var list = document.getElementById('list').object;
     list.reloadData();
@@ -203,22 +213,22 @@ function parseFiles(json) {
 // Fetches the 'trash' namespace.
 function fetchTrash(event)
 {
-    sendRequest(parseFiles, 'GET', '/'+username+'/trash');
+    sendRequest(parseFiles, 'GET', root['trash']);
 }
 
 // Parses the 'trash' namespace response.
-function parseTrash(json) {
-    var filesobj = JSON.parse(json);
+function parseTrash(req) {
+    var filesobj = JSON.parse(req.responseText);
     items = [];
     var folders = filesobj['folders'];
     while (folders.length > 0) {
         var folder = folders.pop();
-        items.push({name: folder['name'], location: folder['uri'], owner: folder['owner']});
+        items.push({name: folder['name'], location: folder['uri']});
     }
     var files = filesobj['files'];
     while (files.length > 0) {
         var file = files.pop();
-        items.push({name: file['name'], location: file['uri'], owner: file['owner']});
+        items.push({name: file['name'], location: file['uri'], data: file});
     }
     var list = document.getElementById('list').object;
     list.reloadData();
@@ -229,12 +239,12 @@ function parseTrash(json) {
 // Fetches the 'others' namespace.
 function fetchOthers(event)
 {
-    sendRequest(parseOthers, 'GET', '/'+username+'/others');
+    sendRequest(parseOthers, 'GET', root['others']);
 }
 
 // Parses the 'others' namespace response.
-function parseOthers(json) {
-    var users = JSON.parse(json);
+function parseOthers(req) {
+    var users = JSON.parse(req.responseText);
     items = [];
     while (users.length > 0) {
         var user = users.pop();
@@ -249,22 +259,53 @@ function parseOthers(json) {
 // Parses the 'groups' namespace response.
 function fetchGroups(event)
 {
-    sendRequest(parseGroups, 'GET', '/'+username+'/groups');
+    sendRequest(parseGroups, 'GET', root['groups']);
 }
 
 // Parses the 'groups' namespace response.
-function parseGroups(json) {
-    var groups = JSON.parse(json);
+function parseGroups(req) {
+    var groups = JSON.parse(req.responseText);
     items = [];
     while (groups.length > 0) {
         var group = groups.pop();
-        var parentUrl = group['uri'].substring(0, group['uri'].lastIndexOf('/'));
-        var ownerUrl = parentUrl.substring(0, parentUrl.lastIndexOf('/'));
-        var owner = ownerUrl.substring(ownerUrl.lastIndexOf('/')+1);
-        items.push({name: group['name'], location: group['uri'], owner: owner});
+        items.push({name: group['name'], location: group['uri'], owner: username});
     }
     var list = document.getElementById('list').object;
     list.reloadData();
     var browser = document.getElementById('browser').object;
     browser.goForward(document.getElementById('listLevel'), 'Groups');
+}
+
+// Fetches the specified file.
+function fetchFile(file)
+{
+    sendRequest(parseFile, 'HEAD', file);
+}
+
+// Parses the response for a file request.
+function parseFile(req) {
+    var headers = parseHeaders(req);
+    var file = JSON.parse(headers['X-Gss-Metadata']);
+    detailController.populate(file);
+    var browser = document.getElementById('browser').object;
+    browser.goForward(document.getElementById('detailLevel'), file.name);
+}
+
+// A helper function that parses the HTTP headers from the specified XHR and returns them in a map.
+function parseHeaders(req) {
+    var allHeaders = req.getAllResponseHeaders();
+    var headers = {};
+    var ls = /^\s*/;
+    var ts = /\s*$/;
+    
+    var lines = allHeaders.split("\n");
+    for (var i = 0; i < lines.length; i++) {
+        var line = lines[i];
+        if (line.length == 0) continue;
+        var pos = line.indexOf(':');
+        var name = line.substring(0, pos).replace(ls, "").replace(ts, "");
+        var value = line.substring(pos + 1).replace(ls, "").replace(ts, "");
+        headers[name] = value;
+    }
+    return headers;
 }
