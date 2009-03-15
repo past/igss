@@ -97,10 +97,7 @@ function load() {
         }
     }
     dashcode.setupParts();
-    var userField = document.getElementById('username');
-    userField.value = username;
-    var tokenField = document.getElementById('token');
-    tokenField.value = token;
+    fetchUser();
     var loading = document.getElementById('activityIndicator').object;
     loading.stopAnimation();
 }
@@ -162,7 +159,7 @@ function sendRequest(handler, method, resource, modified, file, form, update) {
 }
 
 // Fetches the 'user' namespace.
-function fetchUser(event)
+function fetchUser()
 {
     sendRequest(parseUser, 'GET', '/'+username+'/');
 }
@@ -180,8 +177,6 @@ function parseUser(req) {
     list.reloadData();
     var name = document.getElementById('name');
     name.innerHTML = root['name'];
-    var browser = document.getElementById('browser').object;
-    browser.goForward(document.getElementById('home'), 'Home');
 }
 
 // Fetches the 'files' namespace.
