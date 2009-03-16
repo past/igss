@@ -69,7 +69,18 @@ var detailController = {
         var detailOwner = document.getElementById('detailOwner');
         detailOwner.innerHTML = this._item.owner;
         var detailDescription = document.getElementById('detailDescription');
-        detailDescription.innerHTML = "<a href='" + this._item.folder + this._item.name + "'>Download</a>";
+        
+        var resource = this._item.folder + this._item.name;
+        // If the resource is an absolute URI, remove the GSS_URL.
+        if (resource.indexOf(GSS_URL) == 0)
+            resource = resource.slice(GSS_URL.length, resource.length);
+        resource = decodeURI(resource);
+        var now = (new Date()).toUTCString();
+        var sig = sign('GET', now, resource, token);
+        var authparam = encodeURI("Authorization=" + this._item.owner + " " + sig);
+        var dateparam = encodeURI("Date=" + now);
+        var param = "?" + authparam + "&" + dateparam;
+        detailDescription.innerHTML = "<a href='" + this._item.folder + this._item.name + param + "'>Download</a>";
     }
     
 };
@@ -101,23 +112,27 @@ function load() {
     loading.stopAnimation();
 }
 
+// Creates a HMAC-SHA1 signature of method+time+resource, using the token.
+function sign(method, time, resource, token) {
+	var q = resource.indexOf('?');
+	var res = q == -1? resource: resource.substring(0, q);
+	var data = method + time + encodeURIComponent(decodeURIComponent(res));
+	// Use strict RFC compliance
+	b64pad = "=";
+	return b64_hmac_sha1(atob(token), data);
+}
+
 // A helper function for making API requests.
 function sendRequest(handler, method, resource, modified, file, form, update) {
     var loading = document.getElementById('activityIndicator').object;
     loading.startAnimation();
-	// Use strict RFC compliance
-	b64pad = "=";
-    
     // If the resource is an absolute URI, remove the GSS_URL.
     if (resource.indexOf(GSS_URL) == 0)
         resource = resource.slice(GSS_URL.length, resource.length);
     resource = decodeURI(resource);
-	var params = null;
 	var now = (new Date()).toUTCString();
-	var q = resource.indexOf('?');
-	var res = q == -1? resource: resource.substring(0, q);
-	var data = method + now + encodeURIComponent(decodeURIComponent(res));
-	var sig = b64_hmac_sha1(atob(token), data);
+    var sig = sign(method, now, resource, token);
+	var params = null;
 	if (form)
 		params = form;
 	else if (update)
