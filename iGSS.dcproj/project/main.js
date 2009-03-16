@@ -86,14 +86,13 @@ function load() {
                 end = allcookies.length;
             var gsscookie = allcookies.substring(start, end);
             gsscookie = decodeURIComponent(gsscookie);
-            alert(cookie);
             var values = gsscookie.split('|');
             username = values[0];
             token = values[1];
             // Delete the cookie value.
-            document.cookie = "_gss_a=;max-age=-1;domain=gss.grnet.gr;path=/m/";
+            document.cookie = "_gss_a=;max-age=-1;domain=gss.grnet.gr;path=/i/";
         } else {
-            location = "https://gss.grnet.gr/gss/login?next=http://gss.grnet.gr/m/";
+            location = "https://gss.grnet.gr/gss/login?next=http://gss.grnet.gr/i/";
         }
     }
     dashcode.setupParts();
