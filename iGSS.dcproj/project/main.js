@@ -51,7 +51,7 @@ var listController = {
                 fetchFile(item.location);
             else
                 // Folder
-                browser.goForward(document.getElementById('detailLevel'), item.name);
+                fetchFolder(item.location);
         };
         rowElement.onclick = handler;
     }
@@ -317,4 +317,41 @@ function parseHeaders(req) {
         headers[name] = value;
     }
     return headers;
+}
+
+// A function that moves the browser to a new list view.
+/*function moveToView() {
+    var stack = document.getElementById('stackLayout').object;
+    var div = document.getElementById('listLevel');
+    stack.addView(div, stack._viewsTransition[0]);
+    browser.goForward(div, name, function() {setTimeout(function() {stack.removeView(div);}, 750);});
+}*/
+
+// Fetches the specified folder.
+function fetchFolder(folder)
+{
+    sendRequest(parseFolder, 'GET', folder);
+}
+
+// Parses the response for a folder request.
+function parseFolder(req) {
+    var folder = JSON.parse(req.responseText);
+    items = [];
+    var folders = folder['folders'];
+    while (folders.length > 0) {
+        var f = folders.pop();
+        items.push({name: f['name']+'/', location: f['uri']});
+    }
+    var files = folder['files'];
+    while (files.length > 0) {
+        var file = files.pop();
+        items.push({name: file['name'], location: file['uri'], owner: file['owner'], data: file});
+    }
+    var list = document.getElementById('list').object;
+    list.reloadData();
+    var backHandler = function() {
+        fetchFolder(folder['parent']);
+    };
+    var browser = document.getElementById('browser').object;
+    browser.goForward(document.getElementById('listLevel'), folder.name, backHandler);
 }
