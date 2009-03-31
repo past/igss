@@ -116,7 +116,7 @@ function load() {
 function sign(method, time, resource, token) {
 	var q = resource.indexOf('?');
 	var res = q == -1? resource: resource.substring(0, q);
-	var data = method + time + encodeURIComponent(decodeURIComponent(res));
+	var data = method + time + res;
 	// Use strict RFC compliance
 	b64pad = "=";
 	return b64_hmac_sha1(atob(token), data);
@@ -129,7 +129,7 @@ function sendRequest(handler, method, resource, modified, file, form, update) {
     // If the resource is an absolute URI, remove the GSS_URL.
     if (resource.indexOf(GSS_URL) == 0)
         resource = resource.slice(GSS_URL.length, resource.length);
-    resource = decodeURI(resource);
+    resource = resource;
 	var now = (new Date()).toUTCString();
     var sig = sign(method, now, resource, token);
 	var params = null;
