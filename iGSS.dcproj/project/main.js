@@ -9,7 +9,7 @@ var username;
 // The current user's authentication token.
 var token;
 // The root URL of the REST API.
-var GSS_URL = 'http://gss.grnet.gr/gss/rest';
+var GSS_URL = 'http://pithos.grnet.gr/pithos/rest';
 // The user root namespace.
 var root;
 // The container for the list items.
@@ -101,9 +101,9 @@ function load() {
             username = values[0];
             token = values[1];
             // Delete the cookie value.
-            document.cookie = "_gss_a=;max-age=-1;domain=gss.grnet.gr;path=/i/";
+            document.cookie = "_gss_a=;max-age=-1;domain=pithos.grnet.gr;path=/i/";
         } else {
-            location = "https://gss.grnet.gr/gss/login?next=http://gss.grnet.gr/i/";
+            location = "https://pithos.grnet.gr/pithos/login?next=http://pithos.grnet.gr/i/";
         }
     }
     dashcode.setupParts();
@@ -182,7 +182,7 @@ function fetchUser()
 function parseUser(req) {
     root = JSON.parse(req.responseText);
     items = [];
-    items.push({name: 'Files', location: root['files']});
+    items.push({name: 'Files', location: root['fileroot']});
     items.push({name: 'Trash', location: root['trash']});
     items.push({name: 'Shared', location: root['shared']});
     items.push({name: 'Others', location: root['others']});
