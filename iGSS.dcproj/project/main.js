@@ -196,7 +196,7 @@ function parseUser(req) {
 // Fetches the 'files' namespace.
 function fetchFiles(event)
 {
-    sendRequest(parseFiles, 'GET', root['files']);
+    sendRequest(parseFiles, 'GET', root['fileroot']);
 }
 
 // Parses the 'files' namespace response.
