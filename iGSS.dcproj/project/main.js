@@ -222,7 +222,7 @@ function parseFiles(req) {
 // Fetches the 'trash' namespace.
 function fetchTrash(event)
 {
-    sendRequest(parseFiles, 'GET', root['trash']);
+    sendRequest(parseTrash, 'GET', root['trash']);
 }
 
 // Parses the 'trash' namespace response.
