@@ -1,7 +1,7 @@
 /* -*- mode: JavaScript; c-basic-offset: 4; tab-width: 4; indent-tabs-mode: nil -*- */
 /* ex: set tabstop=4 expandtab: */
 /*
- * Copyright (c) 2008 Panagiotis Astithas, Christos V. Stathis
+ * Copyright (c) 2009 Panagiotis Astithas
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
